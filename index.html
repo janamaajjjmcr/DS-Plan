@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interactive Data Science Study Plan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .semester {
+      margin: 20px auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      max-width: 900px;
+    }
+    .semester h2 {
+      text-align: center;
+      background-color: #0077b6;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .courses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .course {
+      width: 160px;
+      height: 100px;
+      border-radius: 8px;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      cursor: pointer;
+      background-color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+    .course.completed {
+      background-color: #6ccf6c;
+      color: #000;
+    }
+    .course.locked {
+      background-color: #ccc;
+      color: #888;
+      cursor: not-allowed;
+    }
+    .progress-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 30px;
+      background-color: #0077b6;
+      color: white;
+      line-height: 30px;
+      text-align: center;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .congrats {
+      text-align: center;
+      font-size: 24px;
+      color: green;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Data Science Study Plan</h1>
+  <div id="plan-container"></div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar">0%</div>
+  </div>
+  <div class="congrats" id="congrats-message"></div>
+
+  <script>
+    const plan = [
+      {
+        year: 2, term: 3,
+        courses: [
+          { code: "SCI 101", name: "General Physics 1", prereq: [] },
+          { code: "DS230", name: "Object Oriented Programming", prereq: [] },
+          { code: "ENG103", name: "Technical Writing", prereq: [] },
+          { code: "MATH150", name: "Discrete Mathematics", prereq: [] },
+          { code: "DS231", name: "Intro to DS Programming", prereq: [] },
+          { code: "ISLM101", name: "Islamic Faith", prereq: [] },
+        ]
+      },
+      {
+        year: 2, term: 4,
+        courses: [
+          { code: "MATH251", name: "Linear Algebra", prereq: ["MATH150"] },
+          { code: "DS240", name: "Data Structure", prereq: ["DS230"] },
+          { code: "MATH241", name: "Math 241", prereq: [] },
+          { code: "DS242", name: "Advanced DS Programming", prereq: ["DS231"] },
+          { code: "DS243", name: "Computer Architecture", prereq: [] },
+          { code: "ISLM102", name: "Ethics in Islam", prereq: [] },
+        ]
+      },
+      {
+        year: 3, term: 5,
+        courses: [
+          { code: "SCI 201", name: "General Physics 2", prereq: ["SCI 101"] },
+          { code: "DS350", name: "Intro to Database", prereq: ["DS240"] },
+          { code: "DS351", name: "Operating Systems", prereq: ["DS243"] },
+          { code: "STAT202", name: "Statistics & Probability", prereq: ["MATH150"] },
+          { code: "DS352", name: "Design & Analysis of Algos", prereq: ["DS240"] },
+          { code: "DS353", name: "Project Mgmt in Computing", prereq: [] },
+        ]
+      },
+      {
+        year: 3, term: 6,
+        courses: [
+          { code: "DS360", name: "Computer Networks", prereq: ["DS243"] },
+          { code: "DS361", name: "System Analysis & Design", prereq: ["DS240"] },
+          { code: "DS362", name: "Web Programming", prereq: ["DS350"] },
+          { code: "DS363", name: "Artificial Intelligence", prereq: ["DS352"] },
+          { code: "DS364", name: "Data Curation", prereq: ["DS350"] },
+          { code: "ISLM103", name: "Islamic Economics", prereq: ["ISLM101"] },
+        ]
+      },
+      {
+        year: 4, term: 7,
+        courses: [
+          { code: "DS470", name: "Data Security & Privacy", prereq: ["DS364"] },
+          { code: "DS471", name: "Machine Learning", prereq: ["DS363"] },
+          { code: "DS472", name: "Data Mining", prereq: ["DS364"] },
+          { code: "DS479", name: "Senior Project 1", prereq: ["DS361", "DS362"] },
+
+        ]
+      },
+      {
+        year: 4, term: 8,
+        courses: [
+          { code: "ISLM104", name: "Islamic Social System", prereq: ["ISLM102"] },
+          { code: "DS480", name: "Data Visualization", prereq: ["DS472"] },
+          { code: "DS481", name: "Ethics in DS", prereq: [] },
+          { code: "DS489", name: "Senior Project 2", prereq: ["DS479"] },
+          { code: "DS499", name: "Practical Training", prereq: ["DS360", "DS361", "DS362", "DS363", "DS364", "ISLM103"] },
+        ]
+      },
+      {
+        year: 4, term: "AI Track",
+        courses: [
+          { code: "DS473", name: "Computer Vision", prereq: ["DS363"] },
+          { code: "DS474", name: "Decision Support Systems", prereq: ["DS363"] },
+          { code: "DS482", name: "Deep Learning", prereq: ["DS471"] },
+          { code: "DS483", name: "Natural Language Processing", prereq: ["DS471"] },
+        ]
+      },
+      {
+        year: 4, term: "Big Data Track",
+        courses: [
+          { code: "DS475", name: "Big Data Modeling", prereq: ["DS363"] },
+          { code: "DS476", name: "Big Data Integration", prereq: ["DS363"] },
+          { code: "DS484", name: "Big Data Optimization", prereq: ["DS475"] },
+          { code: "DS485", name: "Business Intelligence", prereq: ["DS475"] },
+        ]
+      }
+    ];
+
+    const planContainer = document.getElementById("plan-container");
+    const progressBar = document.getElementById("progress-bar");
+    const congratsMessage = document.getElementById("congrats-message");
+
+    const completedCourses = JSON.parse(localStorage.getItem("completedCourses") || "[]");
+    const percentPerCourse = 2.71;
+
+    function saveProgress() {
+      localStorage.setItem("completedCourses", JSON.stringify(completedCourses));
+    }
+
+    function isUnlocked(course) {
+      return course.prereq.every(p => completedCourses.includes(p));
+    }
+
+    function updateProgressBar() {
+      const percent = Math.min((completedCourses.length * percentPerCourse), 100).toFixed(1);
+      progressBar.style.width = `${percent}%`;
+      progressBar.textContent = `${percent}%`;
+
+      if (percent >= 100) {
+        congratsMessage.textContent = "🎓 Congratulations! You have graduated!";
+      } else {
+        congratsMessage.textContent = "";
+      }
+    }
+
+    plan.forEach((semester) => {
+      const semDiv = document.createElement("div");
+      semDiv.className = "semester";
+      semDiv.innerHTML = `<h2>Year ${semester.year} - Term ${semester.term}</h2>`;
+
+      const courseContainer = document.createElement("div");
+      courseContainer.className = "courses";
+
+      semester.courses.forEach(course => {
+        const courseDiv = document.createElement("div");
+        courseDiv.className = "course";
+        courseDiv.textContent = `${course.code}\n${course.name}`;
+
+        if (!isUnlocked(course)) {
+          courseDiv.classList.add("locked");
+        } else if (completedCourses.includes(course.code)) {
+          courseDiv.classList.add("completed");
+        }
+
+        courseDiv.addEventListener("click", () => {
+          if (courseDiv.classList.contains("locked")) return;
+
+          const index = completedCourses.indexOf(course.code);
+          if (index > -1) {
+            completedCourses.splice(index, 1);
+            courseDiv.classList.remove("completed");
+          } else {
+            completedCourses.push(course.code);
+            courseDiv.classList.add("completed");
+          }
+
+          saveProgress();
+          updateProgressBar();
+          location.reload();
+        });
+
+        courseContainer.appendChild(courseDiv);
+      });
+
+      semDiv.appendChild(courseContainer);
+      planContainer.appendChild(semDiv);
+    });
+
+    updateProgressBar();
+  </script>
+</body>
+</html>
